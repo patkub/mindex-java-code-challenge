@@ -113,24 +113,44 @@ Task 2:
 
 Example:
 
-Initially, GET http://localhost:8080/compensation/16a596ae-edd3-4847-99fe-c4518e82c86f replies with a RuntimeException
-because compensation for employeeId: 16a596ae-edd3-4847-99fe-c4518e82c86f does not exist.
+Initially, GET http://localhost:8080/compensation/03aa1462-ffa9-4978-901b-7c001562cf6f replies with an
+InternalServerError because compensation for employeeId: 03aa1462-ffa9-4978-901b-7c001562cf6f does not exist.
+```json
+{
+    "timestamp": "2021-11-05T05:50:15.310+0000",
+    "status": 500,
+    "error": "Internal Server Error",
+    "message": "Invalid employeeId: 03aa1462-ffa9-4978-901b-7c001562cf6f",
+    "path": "/compensation/03aa1462-ffa9-4978-901b-7c001562cf6f"
+}
+```
 
 First, POST http://localhost:8080/compensation with json body, for example
 ```json
 {
-    "employeeId": "16a596ae-edd3-4847-99fe-c4518e82c86f",
+    "employeeId": "03aa1462-ffa9-4978-901b-7c001562cf6f",
     "salary": 28.99,
     "effectiveDate": "2021-11-04"
 }
 ```
 
-Then, GET http://localhost:8080/compensation/16a596ae-edd3-4847-99fe-c4518e82c86f replies with a formatted date:
+Then, GET http://localhost:8080/compensation/03aa1462-ffa9-4978-901b-7c001562cf6f replies with a formatted date:
 ```json
 {
-    "employeeId": "16a596ae-edd3-4847-99fe-c4518e82c86f",
+    "employeeId": "03aa1462-ffa9-4978-901b-7c001562cf6f",
     "salary": 28.99,
     "effectiveDate": "2021-11-04T00:00:00.000+0000"
+}
+```
+
+Attempting to POST compensation for the same employeeId again will reply with an error.
+```json
+{
+    "timestamp": "2021-11-05T05:53:19.621+0000",
+    "status": 500,
+    "error": "Internal Server Error",
+    "message": "Compensation for employeeId: 03aa1462-ffa9-4978-901b-7c001562cf6f already exists!",
+    "path": "/compensation"
 }
 ```
 
