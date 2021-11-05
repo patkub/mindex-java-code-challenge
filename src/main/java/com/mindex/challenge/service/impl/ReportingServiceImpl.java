@@ -8,6 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 
 /**
  * ReportingServiceImpl
@@ -22,7 +25,7 @@ public class ReportingServiceImpl implements ReportingService {
 
     @Override
     public ReportingStructure read(String id) {
-        LOG.debug("Finding employee with id [{}]", id);
+        LOG.debug("Report for employee id [{}]", id);
 
         // find the employee in the database by id
         Employee employee = employeeRepository.findByEmployeeId(id);
@@ -35,9 +38,63 @@ public class ReportingServiceImpl implements ReportingService {
         ReportingStructure reportStruct = new ReportingStructure(employee);
 
         // compute the number of direct reports for an employee and all of their distinct reports
-        reportStruct.getNumberOfReports();
+        int numReports = computeNumReports(employee);
+        // update reporting structure
+        reportStruct.setNumberOfReports(numReports);
 
         // return the information
         return reportStruct;
+    }
+
+    /**
+     * Compute the number of direct reports for an employee and all of their distinct reports
+     * Does a Depth-First Search Traversal (DFS) through direct reports
+     * @param employee starting employee
+     * @return total number of direct reports
+     */
+    private int computeNumReports(Employee employee) {
+        // calculate number of reports
+        int numReports = 0;
+
+        // DFS stack of employees
+        Stack<Employee> dfsStack = new Stack<>();
+
+        // list of already visited employee ids
+        List<String> visitedEmployeeIds = new ArrayList<>();
+
+        // add first employee to stack
+        dfsStack.push(employee);
+
+        while (!dfsStack.isEmpty()) {
+            // get employee at top of stack
+            Employee current = dfsStack.pop();
+
+            // mark current employee as visited
+            visitedEmployeeIds.add(current.getEmployeeId());
+
+            // get current employee's list of direct reports
+            List<Employee> currentDirectReports = current.getDirectReports();
+
+            if (currentDirectReports != null) {
+                for (Employee child : currentDirectReports) {
+                    String childEmployeeId = child.getEmployeeId();
+                    if (!visitedEmployeeIds.contains(childEmployeeId)) {
+                        // add only unvisited direct reports to total
+                        numReports += 1;
+
+                        // update child with full employee data from repository
+                        child = employeeRepository.findByEmployeeId(childEmployeeId);
+                        if (child == null) {
+                            throw new RuntimeException("Invalid employeeId: " + childEmployeeId);
+                        }
+
+                        // push adjacent nodes that have yet to be visited onto dfs stack
+                        dfsStack.push(child);
+                    }
+                }
+            }
+        }
+
+        return numReports;
     }
 }
