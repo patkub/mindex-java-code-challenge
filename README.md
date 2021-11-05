@@ -94,6 +94,22 @@ Please upload your results to a publicly accessible Git repo. Free ones are prov
 
 ## My Notes (Patrick Kubiak):
 - Added instruction to run on Linux
+- Added the following endpoints:
+```
+* READ
+    * HTTP Method: GET
+    * URL: localhost:8080/reports/{id}
+    * RESPONSE: ReportingStructure
+* CREATE
+    * HTTP Method: POST
+    * URL: localhost:8080/compensation
+    * PAYLOAD: Compensation
+    * RESPONSE: Compensation
+* READ
+    * HTTP Method: GET
+    * URL: localhost:8080/compensation/{id}
+    * RESPONSE: Compensation
+```
 
 Task 1:
 
@@ -171,6 +187,7 @@ Looking at http://localhost:8080/employee/16a596ae-edd3-4847-99fe-c4518e82c86f
     ]
 }
 ```
+
 Fixed this by creating a DirectReport class with just an employeeId property.
 ```json
 {
