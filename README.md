@@ -100,6 +100,10 @@ Task 1:
 Example: http://localhost:8080/reports/16a596ae-edd3-4847-99fe-c4518e82c86f
 numberOfReports is 3
 
+Task 2:
+
+
+
 Existing code issues:
 
 Direct reports display as an Employee json object. Instead, it should only be a list of employeeIds.
