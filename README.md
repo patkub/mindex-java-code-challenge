@@ -8,6 +8,12 @@ accessed and mutated in the database without impacting the snapshot.
 ### How to Run
 The application may be executed by running `gradlew bootRun`.
 
+On Linux, make sure to run the gradlew script that is in the current directory:
+```
+chmod +x gradlew
+./gradlew bootRun
+```
+
 ### How to Use
 The following endpoints are available to use:
 ```
@@ -84,3 +90,30 @@ Compensation from the persistence layer.
 
 ## Delivery
 Please upload your results to a publicly accessible Git repo. Free ones are provided by Github and Bitbucket.
+
+
+## My Notes (Patrick Kubiak):
+- Added instruction to run on Linux
+
+Task 1:
+
+Example: http://localhost:8080/reports/16a596ae-edd3-4847-99fe-c4518e82c86f
+numberOfReports is 3
+
+Existing code issues:
+
+Direct reports display as an Employee json object. Instead, it should only be a list of employeeIds.
+Looking at http://localhost:8080/employee/16a596ae-edd3-4847-99fe-c4518e82c86f
+```
+{
+    "employeeId": "16a596ae-edd3-4847-99fe-c4518e82c86f",
+    "firstName": "John",
+    "lastName": "Lennon",
+    "position": "Development Manager",
+    "department": "Engineering",
+    "directReports": [
+        { "employeeId": "b7839309-3348-463b-a7e3-5de1c168beb3", "firstName": null, "lastName": null, "position": null, "department": null, "directReports": null },
+        { "employeeId": "03aa1462-ffa9-4978-901b-7c001562cf6f", "firstName": null, "lastName": null, "position": null, "department": null, "directReports": null }
+    ]
+}
+```
