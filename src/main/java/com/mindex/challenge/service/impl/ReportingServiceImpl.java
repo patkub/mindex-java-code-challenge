@@ -2,6 +2,7 @@ package com.mindex.challenge.service.impl;
 
 import com.mindex.challenge.dao.EmployeeRepository;
 import com.mindex.challenge.data.Employee;
+import com.mindex.challenge.data.DirectReport;
 import com.mindex.challenge.data.ReportingStructure;
 import com.mindex.challenge.service.ReportingService;
 import org.slf4j.Logger;
@@ -73,23 +74,23 @@ public class ReportingServiceImpl implements ReportingService {
             visitedEmployeeIds.add(current.getEmployeeId());
 
             // get current employee's list of direct reports
-            List<Employee> currentDirectReports = current.getDirectReports();
+            List<DirectReport> currentDirectReports = current.getDirectReports();
 
             if (currentDirectReports != null) {
-                for (Employee child : currentDirectReports) {
+                for (DirectReport child : currentDirectReports) {
                     String childEmployeeId = child.getEmployeeId();
                     if (!visitedEmployeeIds.contains(childEmployeeId)) {
                         // add only unvisited direct reports to total
                         numReports += 1;
 
-                        // update child with full employee data from repository
-                        child = employeeRepository.findByEmployeeId(childEmployeeId);
+                        // Find child employee by id in repository
+                        Employee childEmp = employeeRepository.findByEmployeeId(childEmployeeId);
                         if (child == null) {
                             throw new RuntimeException("Invalid employeeId: " + childEmployeeId);
                         }
 
                         // push adjacent nodes that have yet to be visited onto dfs stack
-                        dfsStack.push(child);
+                        dfsStack.push(childEmp);
                     }
                 }
             }

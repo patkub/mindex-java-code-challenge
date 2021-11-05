@@ -154,11 +154,11 @@ Attempting to POST compensation for the same employeeId again will reply with an
 }
 ```
 
-Existing code issues:
+### Existing code issues:
 
 Direct reports display as an Employee json object. Instead, it should only be a list of employeeIds.
 Looking at http://localhost:8080/employee/16a596ae-edd3-4847-99fe-c4518e82c86f
-```
+```json
 {
     "employeeId": "16a596ae-edd3-4847-99fe-c4518e82c86f",
     "firstName": "John",
@@ -168,6 +168,24 @@ Looking at http://localhost:8080/employee/16a596ae-edd3-4847-99fe-c4518e82c86f
     "directReports": [
         { "employeeId": "b7839309-3348-463b-a7e3-5de1c168beb3", "firstName": null, "lastName": null, "position": null, "department": null, "directReports": null },
         { "employeeId": "03aa1462-ffa9-4978-901b-7c001562cf6f", "firstName": null, "lastName": null, "position": null, "department": null, "directReports": null }
+    ]
+}
+```
+Fixed this by creating a DirectReport class with just an employeeId property.
+```json
+{
+    "employeeId": "16a596ae-edd3-4847-99fe-c4518e82c86f",
+    "firstName": "John",
+    "lastName": "Lennon",
+    "position": "Development Manager",
+    "department": "Engineering",
+    "directReports": [
+        {
+            "employeeId": "b7839309-3348-463b-a7e3-5de1c168beb3"
+        },
+        {
+            "employeeId": "03aa1462-ffa9-4978-901b-7c001562cf6f"
+        }
     ]
 }
 ```
