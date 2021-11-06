@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import java.util.UUID;
 
 @Service
@@ -29,12 +31,14 @@ public class CompensationServiceImpl implements CompensationService {
         Employee employee = employeeRepository.findByEmployeeId(empId);
 
         if (employee == null) {
-            throw new RuntimeException("Invalid employeeId: " + empId);
+            LOG.debug("Compensation invalid employeeId: [{}]", empId);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid employeeId: " + empId);
         }
 
         if (compensationRepository.findByEmployeeId(empId) != null) {
             // a compensation for this employee already exists
-            throw new RuntimeException("Compensation for employeeId: " + empId + " already exists!");
+            LOG.debug("Compensation for employeeId: [{}] already exists!", empId);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Compensation for employeeId: " + empId + " already exists!");
         }
 
         compensationRepository.insert(compensation);
@@ -49,7 +53,8 @@ public class CompensationServiceImpl implements CompensationService {
         Compensation compensation = compensationRepository.findByEmployeeId(employeeId);
 
         if (compensation == null) {
-            throw new RuntimeException("Invalid employeeId: " + employeeId);
+            LOG.debug("Compensation invalid employeeId: [{}]", employeeId);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid employeeId: " + employeeId);
         }
 
         return compensation;

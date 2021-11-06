@@ -130,14 +130,14 @@ Task 2:
 Example:
 
 Initially, GET http://localhost:8080/compensation/03aa1462-ffa9-4978-901b-7c001562cf6f replies with an
-InternalServerError because compensation for employeeId: 03aa1462-ffa9-4978-901b-7c001562cf6f does not exist.
+http Not Found error because compensation for employeeId: 03aa1462-ffa9-4978-901b-7c001562cf6f does not exist.
 ```json
 {
-    "timestamp": "2021-11-05T05:50:15.310+0000",
-    "status": 500,
-    "error": "Internal Server Error",
-    "message": "Invalid employeeId: 03aa1462-ffa9-4978-901b-7c001562cf6f",
-    "path": "/compensation/03aa1462-ffa9-4978-901b-7c001562cf6f"
+  "timestamp": "2021-11-06T17:57:49.891+0000",
+  "status": 404,
+  "error": "Not Found",
+  "message": "Invalid employeeId: 03aa1462-ffa9-4978-901b-7c001562cf6f",
+  "path": "/compensation/03aa1462-ffa9-4978-901b-7c001562cf6f"
 }
 ```
 
@@ -206,3 +206,5 @@ Fixed this by creating a DirectReport class with just an employeeId property.
     ]
 }
 ```
+
+Changed RuntimeExceptions into proper HTTP response status codes.
