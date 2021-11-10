@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;
 
@@ -63,8 +63,9 @@ public class ReportingServiceImpl implements ReportingService {
         // DFS stack of employees
         Stack<Employee> dfsStack = new Stack<>();
 
-        // list of already visited employee ids
-        List<String> visitedEmployeeIds = new ArrayList<>();
+        // set of already visited employee ids
+        // better to use a hash set instead of array list so that look up is O(1) instead of O(n)
+        HashSet<String> visitedEmployeeIds = new HashSet<String>();
 
         // add first employee to stack
         dfsStack.push(employee);
